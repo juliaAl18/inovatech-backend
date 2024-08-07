@@ -32,17 +32,17 @@ app.get('/feed-rss', async (req, res) => {
   let posts = [];
 
   try {
-    const response = await axios.get(`${apiInstagram}/me/media?access_token=${token}&fields=media_url,media_type,caption,permalink`);
+    const response = await axios.get(`${apiInstagram}/me/media?access_token=${token}&fields=media_url,media_type,caption,permalink`).then((response) => response.data);
     posts = response.data;
   } catch (error) {
     console.error('Error fetching Instagram posts:', error);
     return res.status(500).json({ data: { error: 'Error fetching Instagram posts' }});
   }
 
-  if (posts.data.length === 0) {
+  if (posts.length === 0) {
     return res.status(204).json({ data: { msg: 'Não foram encontrados posts!' }});
   } else {
-    return res.json(posts);
+    return res.json({data: posts});
   }
 });
 
